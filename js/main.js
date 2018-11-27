@@ -1,15 +1,7 @@
 //1.点开始生成带有10个雷的81个方块
 var sweepMine = {
     mineNum: 'start',//雷的位置
-    main: [[0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0]],
+    main: [[0, 0, 0, 0, 0, 0, 0, 0, 0],[0, 0, 0, 0, 0, 0, 0, 0, 0],[0, 0, 0, 0, 0, 0, 0, 0, 0],[0, 0, 0, 0, 0, 0, 0, 0, 0],[0, 0, 0, 0, 0, 0, 0, 0, 0],[0, 0, 0, 0, 0, 0, 0, 0, 0],[0, 0, 0, 0, 0, 0, 0, 0, 0],[0, 0, 0, 0, 0, 0, 0, 0, 0],[0, 0, 0, 0, 0, 0, 0, 0, 0]],
     map: document.getElementsByClassName('main')[0],
     init: function () {//初始化
         this.setMine();
@@ -33,6 +25,7 @@ var sweepMine = {
                 li[i].onclick = function () {//绑定每个li的点击事件
                     parseInt(this.getAttribute('class').substring(3)) == 999 ? sweepMine.fail() : sweepMine.goOn(li, i, this);
                     this.style.backgroundColor = 'gray';
+                    this.setAttribute('data','1');
                 }
             }(i))
         }
@@ -62,6 +55,8 @@ var sweepMine = {
                 }
             }
             sweepMine.mineNum = 'start';
+            clearInterval(timer1);
+            document.getElementsByTagName('p')[1].innerHTML = '0';
             sweepMine.init();
         }
         document.oncontextmenu = function (e) {//清除页面右键菜单
@@ -69,7 +64,7 @@ var sweepMine = {
         }
     },
     timer: function () {
-        var timer1 = setInterval(function () {
+        timer1 = setInterval(function () {
             var timeText = document.getElementsByTagName('p')[1];
             timeText.innerHTML = parseInt(timeText.innerHTML) + 1;
         }, 1000)
@@ -126,6 +121,10 @@ var sweepMine = {
         }
         else {
             try {//边界判读
+                var state = li[i].getAttribute('data');
+                if(state == 1){//标志位极大的优化了扩展时间
+                    return;
+                }
                 if (i == 9 || i == 18 || i == 27 || i == 36 || i == 45 || i == 54 || i == 63) {
                     li[i + 1].click();
                     li[i - 9].click();
