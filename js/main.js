@@ -1,8 +1,9 @@
 //1.点开始生成带有10个雷的81个方块
 var sweepMine = {
     mineNum: 'start',//雷的位置
-    main: [[0, 0, 0, 0, 0, 0, 0, 0, 0],[0, 0, 0, 0, 0, 0, 0, 0, 0],[0, 0, 0, 0, 0, 0, 0, 0, 0],[0, 0, 0, 0, 0, 0, 0, 0, 0],[0, 0, 0, 0, 0, 0, 0, 0, 0],[0, 0, 0, 0, 0, 0, 0, 0, 0],[0, 0, 0, 0, 0, 0, 0, 0, 0],[0, 0, 0, 0, 0, 0, 0, 0, 0],[0, 0, 0, 0, 0, 0, 0, 0, 0]],
+    main: [[0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0], [0, 0, 0, 0, 0, 0, 0, 0, 0]],
     map: document.getElementsByClassName('main')[0],
+    cout: 0,
     init: function () {//初始化
         this.setMine();
         this.setAround();
@@ -23,9 +24,21 @@ var sweepMine = {
         for (var i = 0; i < 81; i++) {
             (function (i) {
                 li[i].onclick = function () {//绑定每个li的点击事件
-                    parseInt(this.getAttribute('class').substring(3)) == 999 ? sweepMine.fail() : sweepMine.goOn(li, i, this);
+                    parseInt(this.getAttribute('class').substring(3)) == 999 ? sweepMine.fail() : sweepMine.goOn(li, i);
                     this.style.backgroundColor = 'gray';
-                    this.setAttribute('data','1');
+                    this.setAttribute('data', '1');
+                    sweepMine.cont = 0;
+                    for (var x = 0; x < 81; x++) {
+                        try {
+                            if (li[x].getAttribute('data') == 1 && li[x].getAttribute('class').substring(3) != 999) {
+                                sweepMine.cont++;
+                            }
+                        }
+                        catch{ }
+                    }
+                    if (sweepMine.cont == 71) {
+                        sweepMine.win();
+                    }
                 }
             }(i))
         }
@@ -56,6 +69,7 @@ var sweepMine = {
             }
             sweepMine.mineNum = 'start';
             clearInterval(timer1);
+            document.getElementsByTagName('p')[0].innerHTML = '10';
             document.getElementsByTagName('p')[1].innerHTML = '0';
             sweepMine.init();
         }
@@ -115,14 +129,14 @@ var sweepMine = {
             }
         }
     },
-    goOn: function (li, i, myThis) {//递归实现展开功能
-        if (parseInt(li[i].getAttribute('class').substring(3)) != 0) {
+    goOn: function (li, i) {//递归实现展开功能
+        if (li[i].getAttribute('class').substring(3) != 0) {
             li[i].innerHTML = parseInt(li[i].getAttribute('class').substring(3))
         }
         else {
             try {//边界判读
                 var state = li[i].getAttribute('data');
-                if(state == 1){//标志位极大的优化了扩展时间
+                if (state == 1) {//标志位极大的优化了扩展时间
                     return;
                 }
                 if (i == 9 || i == 18 || i == 27 || i == 36 || i == 45 || i == 54 || i == 63) {
@@ -168,6 +182,9 @@ var sweepMine = {
             }
             catch{ }
         }
+    },
+    win: function () {
+        alert('win');
     },
     disArr: function (str) {//字符串去重
         var obj = {};
