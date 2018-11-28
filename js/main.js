@@ -5,7 +5,6 @@ var sweepMine = {
     map: document.getElementsByClassName('main')[0],
     cout: 0,
     init: function () {//初始化
-
         var start = document.getElementsByClassName('start')[0];
         start.innerHTML = '<i class="fa fa-smile-o" aria-hidden="true"></i>';
         this.setMine();
