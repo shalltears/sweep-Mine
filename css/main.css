@@ -72,15 +72,13 @@
     font-size: 32px;
     cursor: pointer;
     background-color: aqua;
+    transition-duration: 1s;
 }
 .main li:hover{
     background-color: rgb(8, 255, 160);
 }
 .main li:active{
     border: 2px solid slateblue;
-}
-.li-999{
-    /* background-color: black!important; */
 }
 .start{
     cursor: pointer;

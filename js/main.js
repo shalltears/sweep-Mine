@@ -5,6 +5,9 @@ var sweepMine = {
     map: document.getElementsByClassName('main')[0],
     cout: 0,
     init: function () {//初始化
+
+        var start = document.getElementsByClassName('start')[0];
+        start.innerHTML = '<i class="fa fa-smile-o" aria-hidden="true"></i>';
         this.setMine();
         this.setAround();
         this.setCage();
@@ -69,6 +72,7 @@ var sweepMine = {
             }
             sweepMine.mineNum = 'start';
             clearInterval(timer1);
+            try { clearInterval(timer2); } catch{ }
             document.getElementsByTagName('p')[0].innerHTML = '10';
             document.getElementsByTagName('p')[1].innerHTML = '0';
             sweepMine.init();
@@ -118,15 +122,6 @@ var sweepMine = {
                 ul.appendChild(li);
             }
             this.map.appendChild(ul);
-        }
-    },
-    fail: function () {//失败后执行
-        var li = document.getElementsByTagName('li');
-        for (var i = 0; i < 81; i++) {
-            if (parseInt(li[i].getAttribute('class').substring(3)) == 999) {
-                li[i].innerHTML = '<i class="fa fa-bomb" aria-hidden="true"></i>';
-                li[i].style.backgroundColor = 'gray';
-            }
         }
     },
     goOn: function (li, i) {//递归实现展开功能
@@ -183,8 +178,32 @@ var sweepMine = {
             catch{ }
         }
     },
-    win: function () {
-        alert('win');
+    winCont: 0,
+    win: function () {//成功后执行
+        var timer2 = setInterval(function () {
+            var li = document.getElementsByTagName('li');
+            var color = '#' + Math.floor(Math.random() * 100).toString(10) + Math.floor(Math.random() * 100).toString(10) + Math.floor(Math.random() * 100).toString(10);
+            li[sweepMine.winCont].style.backgroundColor = color;
+            li[sweepMine.winCont].style.color = color;
+            sweepMine.winCont++;
+            if (sweepMine.winCont == 81) {
+                sweepMine.winCont = 0;
+            }
+        }, 10);
+        clearInterval(timer1);
+    },
+    fail: function () {//失败后执行
+        var li = document.getElementsByTagName('li');
+        for (var i = 0; i < 81; i++) {
+            if (parseInt(li[i].getAttribute('class').substring(3)) == 999) {
+                li[i].innerHTML = '<i class="fa fa-bomb" aria-hidden="true"></i>';
+                li[i].style.backgroundColor = 'gray';
+            }
+            li[i].onclick = function(){};
+            clearInterval(timer1);
+        }
+        var start = document.getElementsByClassName('start')[0];
+        start.innerHTML = '<i class="fa fa-thumbs-o-down" aria-hidden="true"></i>';
     },
     disArr: function (str) {//字符串去重
         var obj = {};
