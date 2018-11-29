@@ -4,6 +4,7 @@
     list-style: none;
     font-size: 0px;
     box-sizing: border-box;
+    user-select: none;
 }
 .wrapper{
     width: 500px;
