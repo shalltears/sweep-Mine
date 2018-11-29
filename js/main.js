@@ -179,7 +179,7 @@ var sweepMine = {
     },
     winCont: 0,
     win: function () {//成功后执行
-        var timer2 = setInterval(function () {
+        timer2 = setInterval(function () {
             var li = document.getElementsByTagName('li');
             var color = '#' + Math.floor(Math.random() * 100).toString(10) + Math.floor(Math.random() * 100).toString(10) + Math.floor(Math.random() * 100).toString(10);
             li[sweepMine.winCont].style.backgroundColor = color;
